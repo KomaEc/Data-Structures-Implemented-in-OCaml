@@ -1,4 +1,4 @@
-# data-structures-in-Ocaml
+# Data-structures-in-Ocaml
 Partial implementations of data structures using Ocaml
 
 References: 
