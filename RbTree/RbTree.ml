@@ -116,14 +116,14 @@ module RbSet = struct
     
     *)
     
-    (* When the node's left child is a doubly black
+   (* When the node's left child is a doubly black
    Four situations described in 'Introduction to Algorithms'*)
    let rec lbal = function
      | Node (Blk, dbl, y, Node (Red, l', u, r')) ->
        let l, d = lbal (Node (Red, dbl, y, l')) in
        Node (Blk, l, u, r'), d
      | Node (col, dbl, y, Node (Blk, Node (Red, c, z, d), u, r')) ->
-       lbal (Node (col, dbl, y, Node (Blk, c, z, Node (Red, d, u, r'))))
+       Node (col, Node (Blk, dbl, y, c), z, Node (Blk, d, u, r')), false
      | Node (col, dbl, y, Node (Blk, l', u, Node (Red, e, v, f))) ->
        Node (col, Node (Blk, dbl, y, l'), u, Node (Blk, e, v, f)), false
      | Node (col, dbl, y, Node (Blk, l', u, r')) ->
@@ -135,7 +135,7 @@ module RbSet = struct
       let r, d = rbal (Node (Red, r', u, dbr)) in
       Node (Blk, l', y, r), d
     | Node (col, Node (Blk, l', y, Node (Red, c, z, d)), u, dbr) ->
-      rbal (Node (col, Node (Blk, Node (Red, l', y, c), z, d), u, dbr))
+      Node (col, Node (Blk, l', y, c), z, Node (Blk, d, u, dbr)), false
     | Node (col, Node (Blk, Node (Red, a, x, b), y, r'), u, dbr) ->
       Node (col, Node (Blk, a, x, b), y, Node (Blk, r', u, dbr)), false
     | Node (col, Node (Blk, l', y, r'), u, dbr) ->
