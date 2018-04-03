@@ -65,58 +65,8 @@ module RbSet = struct
     | Node (_, l, v, r) -> Node(Blk, l, v, r)  (* color root black *)
     | Leaf -> failwith "impossible"
 
-(*
+
 (* When the node's left child is a doubly black
-   Four situations described in 'Introduction to Algorithms'*)
-  let rec lbal = function
-    | Node (Blk, dbl, y, Node (Red, Node (Blk, c, z, d), u, Node (Blk, e, v, f))) ->
-      let l, d = lbal (Node (Red, dbl, y, Node (Blk, c, z, d))) in
-      Node (Blk, l, u, Node (Blk, e, v, f)), d
-    | Node (col, dbl, y, Node (Blk, Node (Blk, c, z, d), u, Node (Blk, e, v, f))) ->
-      Node (col, dbl, y, Node (Red, Node (Blk, c, z, d), u, Node (Blk, e, v, f))), true
-    | Node (col, dbl, y, Node (Blk, Node (Red, c, z, d), u, Node (Blk, e, v, f))) ->
-      lbal (Node (col, dbl, y, Node (Blk, c, z, Node (Red, d, u, Node (Blk, e, v, f)))))
-    | Node (col, dbl, y, Node (Blk, Node (col', c, z, d), u, Node (Red, e, v, f))) ->
-      Node (col, Node (Blk, dbl, y, Node (col', c, z, d)), u, Node (Blk, e, v, f)), false
-
-    (* analogies for situations where the doubly black node does not have a nephew *)
-    | Node (Blk, dbl, y, Node (Red, Leaf, u, Leaf)) ->
-      let l, d = lbal (Node (Red, dbl, y, Leaf)) in
-      Node (Blk, l, u, Leaf), d
-    | Node (col, dbl, y, Node (Blk, Leaf, u, Leaf)) ->
-      Node (col, dbl, y, Node (Red, Leaf, u, Leaf)), true
-    | Node (col, dbl, y, Node (Blk, Node (Red, c, z, d), u, Leaf)) ->
-      lbal (Node (col, dbl, y, Node (Blk, c, z, Node (Red, d, u, Leaf))))
-    | Node (col, dbl, y, Node (Blk, Leaf, u, Node (Red, e, v, f))) ->
-      Node (col, Node (Blk, dbl, y, Leaf), u, Node (Blk, e, v, f)), false
-    | _ -> failwith "impossible"
-
-  let rec rbal = function
-    | Node (Blk, Node (Red, Node (Blk, a, x, b), y, Node (Blk, c, z, d)), u, dbr) ->
-      let r, d = rbal (Node (Red, Node (Blk, c, z, d), u, dbr)) in
-      Node (Blk, Node (Blk, a, x, b), y, r), d
-    | Node (col, Node (Blk, Node (Blk, a, x, b), y, Node (Blk, c, z, d)), u, dbr) ->
-      Node (col, Node (Red, Node (Blk, a, x, b), y, Node (Blk, c, z, d)), u, dbr), true
-    | Node (col, Node (Blk, Node (Blk, a, x, b), y, Node (Red, c, z, d)), u, dbr) ->
-      rbal (Node (col, Node (Blk, Node (Red, Node (Blk, a, x, b), y, c), z, d), u, dbr))
-    | Node (col, Node (Blk, Node (Red, a, x, b), y, Node (col', c, z, d)), u, dbr) ->
-      Node (col, Node (Blk, a, x, b), y, Node (Blk, Node (col', c, z, d), u, dbr)), false
-
-    (* analogies for situations where the doubly black node does not have a nephew *)
-    | Node (Blk, Node (Red, Leaf, y, Leaf), u, dbr) ->
-      let r, d = rbal (Node (Red, Leaf, u, dbr)) in
-      Node (Blk, Leaf, y, r), d
-    | Node (col, Node (Blk, Leaf, y, Leaf), u, dbr) ->
-      Node (col, Node (Red, Leaf, y, Leaf), u, dbr), true
-    | Node (col, Node (Blk, Leaf, y, Node (Red, c, z, d)), u, dbr) ->
-      rbal (Node (col, Node (Blk, Node (Red, Leaf, y, c), z, d), u, dbr))
-    | Node (col, Node (Blk, Node (Red, a, x, b), y, Leaf), u, dbr) ->
-      Node (col, Node (Blk, a, x, b), y, Node (Blk, Leaf, u, dbr)), false
-    | _ -> failwith "impossible"
-    
-    *)
-    
-   (* When the node's left child is a doubly black
    Four situations described in 'Introduction to Algorithms'*)
    let rec lbal = function
      | Node (Blk, dbl, y, Node (Red, l', u, r')) ->
