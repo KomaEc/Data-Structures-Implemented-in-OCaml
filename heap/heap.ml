@@ -71,7 +71,7 @@ module Make (X : Ordered) = struct
          let d = h.data in
          d.(0) <- d.(n);
          h.cursor <- n;
-         heapfy_down h 0
+         heapify_down h 0
   
   let pop h = 
     let x = minimum h in remove h; x
