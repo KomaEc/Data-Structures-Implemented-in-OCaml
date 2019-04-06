@@ -36,7 +36,7 @@ module Make (X : Ordered) = struct
       else d.(i) <- x in 
     heapify_up' i
 
-  let heapfy_down h i = 
+  let heapify_down h i = 
     let d = h.data in 
     let x = d.(i) in 
     let rec heapify_down' i = 
@@ -83,7 +83,7 @@ module Make (X : Ordered) = struct
     Array.blit a 0 d 0 n;
     let h = { size = n; cursor = n; data = d } in
     for i = n / 2 - 1 downto 0 do 
-      heapfy_down h i 
+      heapify_down h i 
     done;
     h
                     
