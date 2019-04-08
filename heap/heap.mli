@@ -23,4 +23,8 @@ module Make (X : Ordered) : sig
 
   val from_array : X.t array -> t
 
+  val fold : ('a -> X.t -> 'a) -> 'a -> t -> 'a
+
+  val iter : (X.t -> unit) -> t -> unit
+
 end
