@@ -30,7 +30,7 @@ module Make (X : Ordered) = struct
     let x = d.(i) in
     let rec heapify_up' i = 
       let p = (i - 1) / 2 in 
-      if p >= 0 && X.compare d.(p) x < 0 then 
+      if i >= 1 && X.compare d.(p) x > 0 then 
         begin d.(i) <- d.(p);
               heapify_up' p end
       else d.(i) <- x in 
@@ -52,9 +52,8 @@ module Make (X : Ordered) = struct
 
   let add h elt = 
     if h.size < 0
-    then begin h.size <- - h.size;
-               h.data <- Array.make 1 elt;
-               h.cursor <- 1 end
+    then begin h.size <- -h.size;
+               h.data <- Array.make h.size elt end
     else if h.cursor = h.size then resize h else ();
     let n = h.cursor in
     h.data.(n) <- elt;
@@ -86,6 +85,52 @@ module Make (X : Ordered) = struct
       heapify_down h i 
     done;
     h
+
+  let fold f a h = 
+    Array.fold_left f a h.data 
+
+  let iter f h = 
+    Array.iter f h.data
                     
+
+end
+
+module Test (X: sig end) = struct 
+  module H = Make(struct type t = int let compare = compare end) 
+  open H
+
+  let random_array max_size = 
+    let a = Array.make max_size 0 in 
+    let () = Array.iteri (fun i _ -> a.(i) <- i) a in
+    let rec random_permute i = 
+      if i = max_size then ()
+      else let delta = Random.int (max_size - i) in 
+           let j = i + delta in 
+           let tmp = a.(i) in 
+           begin a.(i) <- a.(j);
+                 a.(j) <- tmp;
+                 random_permute (i + 1) end in
+    random_permute 0; a
+
+  let a = random_array 40
+  let h1 = from_array a
+  let rec show h = 
+    if is_empty h then print_newline()
+    else let m = pop h in 
+         begin print_int m; print_string " ";
+         show h end
+  
+  let () = show h1 
+
+  let h2 = create 9
+
+  let () = Array.iter (fun x -> add h2 x) a
+  let () = show h2 
+
+  let test () = 
+    let a = random_array 100 in 
+    let h = create 10 in 
+    Array.iter (fun x -> add h x) a;
+    show h
 
 end
