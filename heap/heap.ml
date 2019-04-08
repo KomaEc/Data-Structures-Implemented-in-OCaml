@@ -127,10 +127,15 @@ module Test (X: sig end) = struct
   let () = Array.iter (fun x -> add h2 x) a
   let () = show h2 
 
-  let test () = 
+  let test1 () = 
     let a = random_array 100 in 
     let h = create 10 in 
     Array.iter (fun x -> add h x) a;
+    show h
+
+  let test2 () = 
+    let a = random_array 100 in 
+    let h = from_array a in 
     show h
 
 end
